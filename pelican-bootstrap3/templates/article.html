@@ -37,6 +37,24 @@
                     </div>
                 </div>
                 {{ article.content }}
+
+                {% if article.album %}
+                <table class="gallery_table">
+                    <tr>
+                {% for image in article.galleryimages %}
+                    {% if article.gallerycaptions.get(image) %}
+                        <td><a class="{{ article.album }} cboxElement" href="{{ SITEURL }}/images/gallery/{{ article.album }}/{{ image }}" title="{{ article.gallerycaptions.get(image) }}"><img src="{{ SITEURL }}/images/thumbs/{{ article.album }}/{{ image }}"></a><br />{{ article.gallerycaptions.get(image) }}</td>
+                    {% else %}
+                        <td><a class="{{ article.album }} cboxElement" href="{{ SITEURL }}/images/gallery/{{ article.album }}/{{ image }}"><img src="{{ SITEURL }}/images/thumbs/{{ article.album }}/{{ image }}"></a></td>
+                    {% endif %}
+                    {% if (loop.index % GALLERY_IMG_PER_ROW) == 0 %}
+                    </tr>
+                    <tr>
+                    {% endif %}
+                {% endfor %}
+                    </tr>
+                </table>
+                {% endif %}
             </div>
             <!-- /.entry-content -->
             {% include 'includes/related-posts.html' %}
