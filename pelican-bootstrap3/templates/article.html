@@ -42,17 +42,67 @@
                 <table class="gallery_table">
                     <tr>
                 {% for image in article.galleryimages %}
+                        <td>
+                            <table class="layout">
+                                <tr class="layout">
+                                    <td class="layout" colspan="2">&nbsp;
                     {% if article.gallerycaptions.get(image) %}
-                        <td><a class="{{ article.album }} cboxElement" href="{{ SITEURL }}/images/gallery/{{ article.album }}/{{ image }}" title="{{ article.gallerycaptions.get(image) }}"><img src="{{ SITEURL }}/images/thumbs/{{ article.album }}/{{ image }}"></a><br />{{ article.gallerycaptions.get(image) }}</td>
-                    {% else %}
-                        <td><a class="{{ article.album }} cboxElement" href="{{ SITEURL }}/images/gallery/{{ article.album }}/{{ image }}"><img src="{{ SITEURL }}/images/thumbs/{{ article.album }}/{{ image }}"></a></td>
+                            <strong>{{ article.gallerycaptions.get(image) }}</strong>
                     {% endif %}
+                                    </td>
+                                </tr>
+                                <tr class="layout">
+                                    <td class="layout">
+                                        <a class="{{ article.album }} cboxElement" href="{{ SITEURL }}/images/gallery/{{ article.album }}/{{ image }}"
+                    {% if article.gallerycaptions.get(image) %}title="{{ article.gallerycaptions.get(image) }}"{% endif %}>
+                                            <img src="{{ SITEURL }}/images/thumbs/{{ article.album }}/{{ image }}">
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr class="layout">
+                     {% if article.galleryexif and article.galleryexif.get(image) %}
+                                     <td class="layout">
+                                        <table class="exif_info">
+                                            {% if article.galleryexif.get(image).get("Model") %}
+                                            <tr><th colspan="4">{{article.galleryexif.get(image).get("Model")}}</th></tr>
+                                            {% endif %}
+                                            {% if article.galleryexif.get(image).get("LensModel") %}
+                                            <tr><th colspan="4">{{article.galleryexif.get(image).get("LensModel")}}</th></tr>
+                                            {% endif %}
+                                            <tr>
+                                            {% if article.galleryexif.get(image).get("ISOSpeedRatings") %}
+                                                <td>{{article.galleryexif.get(image).get("ISOSpeedRatings")}}</td>
+                                            {% endif %}
+                                            {% if article.galleryexif.get(image).get("FocalLength") %}
+                                                <td>{{article.galleryexif.get(image).get("FocalLength")}}mm</td>
+                                            {% endif %}
+                                            {% if article.galleryexif.get(image).get("FNumber") %}
+                                                <td>f/{{article.galleryexif.get(image).get("FNumber")}}</td>
+                                            {% endif %}
+                                            {% if article.galleryexif.get(image).get("ExposureTime") %}
+                                                <td>{{article.galleryexif.get(image).get("ExposureTime")}}</td>
+                                            {% endif %}
+                                            </tr>
+                                        </table>
+                                    </td>
+                    {% endif %}
+                                </tr>
+                    {% if article.gallerycomments.get(image) %}
+                                <tr>
+                                    <td colspan="2">{{ article.gallerycomments.get(image) }}</td>
+                                </tr>
+                    {% endif %}
+                            </table>
+                        </td>
                     {% if (loop.index % GALLERY_IMG_PER_ROW) == 0 %}
                     </tr>
                     <tr>
                     {% endif %}
                 {% endfor %}
-                    </tr>
+                    {% if (article.galleryimages.__len__() % GALLERY_IMG_PER_ROW) != 0 %}
+                    <td colspan="{{GALLERY_IMG_PER_ROW - (article.galleryimages.__len__() % GALLERY_IMG_PER_ROW)}}" />
+                    {% endif %}
+                     </tr>
                 </table>
                 {% endif %}
             </div>
